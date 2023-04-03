@@ -14,7 +14,7 @@ with open("app/data/hot_news_rss.json", encoding="utf-8", mode='r') as f:
 TODAY = today = date.today()
 MAX_DESCRIPTION_LENGTH = 300
 MAX_POSTS = 3
-executor = concurrent.futures.ThreadPoolExecutor(max_workers=2)
+executor = concurrent.futures.ThreadPoolExecutor(max_workers=3)
 
 def cut_string(text):
     words = text.split()
