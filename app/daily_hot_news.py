@@ -8,7 +8,7 @@ import requests
 
 from app.gpt import get_answer_from_llama_web
 
-with open("app/data/hot_news_rss.json", "r") as f:
+with open("app/data/hot_news_rss.json", encoding="utf-8", mode='r') as f:
     rss_urls = json.load(f)
 
 TODAY = today = date.today()
@@ -40,13 +40,13 @@ def get_summary_from_gpt(url):
 def get_description(entry):
     gpt_answer = None
     try:
-        gpt_answer = get_summary_from_gpt(entry.link)
+        gpt_answer = get_summary_from_gpt(entry.get('link'))
     except Exception as e:
         logging.error(e)
     if gpt_answer is not None:
         summary = 'AI: ' + gpt_answer
     else:
-        summary = cut_string(get_text_from_html(entry.description))
+        summary = cut_string(get_text_from_html(entry.get('description')))
     return summary
 
 def get_text_from_html(html):
@@ -64,17 +64,17 @@ def get_post_urls_with_title(rss_url: str):
         try:
             feed = response.json()
             updated_posts = []
-            for entry in feed.items:
+            for entry in feed.get('items'):
                 updated_post = {}
-                updated_post['title'] = entry.title
+                updated_post['title'] = entry.get('title')
                 updated_post['summary'] = get_description(entry)
-                updated_post['url'] = entry.link
-                updated_post['publish_date'] = entry.pubDate
+                updated_post['url'] = entry.get('link')
+                updated_post['publish_date'] = entry.get('pubDate')
                 updated_posts.append(updated_post)
                 if len(updated_posts) >= MAX_POSTS:
                     break
             return updated_posts
-        except:
+        except Exception as error:
             return "Error: Unable to get rss json content"
     else:
         return f"Error: {response.status_code} - {response.reason}"
