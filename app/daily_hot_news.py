@@ -75,10 +75,11 @@ def get_post_urls_with_title(rss_url):
                     break
             return updated_posts
         except Exception as error:
-            logging.error(error)
-            return "Error: Unable to get rss json content"
+            logging.error("Error: Unable to get rss json content", error)
+            return []
     else:
-        return f"Error: {response.status_code} - {response.reason}"
+        logging.error(f"Error: {response.status_code} - {response.reason}")
+        return []
 
 # def get_post_urls_with_title(rss_url):
 #     feed = feedparser.parse(rss_url)
