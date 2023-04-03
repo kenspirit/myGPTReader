@@ -32,7 +32,7 @@ def get_summary_from_gpt_thread(url):
     return str(get_answer_from_llama_web([news_summary_prompt], [url]))
 
 def get_summary_from_gpt(url):
-    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
         future = executor.submit(get_summary_from_gpt_thread, url)
         return future.result(timeout=600)
 
@@ -163,7 +163,7 @@ def build_jisilu_news_hot_news_blocks():
     return build_hot_news_blocks('jisilu')
 
 def build_all_news_block():
-    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
         v2ex_news = executor.submit(build_v2ex_hot_news_blocks)
         onepoint3acres_news = executor.submit(build_1point3acres_hot_news_blocks)
         reddit_news = executor.submit(build_reddit_news_hot_news_blocks)
