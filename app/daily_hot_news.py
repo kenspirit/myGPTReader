@@ -111,19 +111,19 @@ def build_slack_blocks(title, news):
         blocks.extend([{
             "type": "section",
             "text": {
-				"text": f"*{news_item['title']}*",
+				"text": f"*{news_item.get('title')}*",
 				"type": "mrkdwn"
 			},
         },{
             "type": "section",
             "text": {
-				"text": f"{news_item['summary']}",
+				"text": f"{news_item.get('summary')}",
 				"type": "plain_text"
 			},
         },{
             "type": "section",
             "text": {
-				"text": f"原文链接：<{news_item['url']}>",
+				"text": f"原文链接：<{news_item.get('url')}>",
 				"type": "mrkdwn"
 			},
         },{
@@ -134,6 +134,7 @@ def build_slack_blocks(title, news):
 def build_hot_news_blocks(news_key):
     rss = rss_urls[news_key]['rss']['hot']
     hot_news = get_post_urls_with_title(rss['url'])
+    print(f"{hot_news}")
     hot_news_blocks = build_slack_blocks(
         rss['name'], hot_news)
     return hot_news_blocks
