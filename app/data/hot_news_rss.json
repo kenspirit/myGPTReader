@@ -1,13 +1,4 @@
 {
-    "v2ex": {
-        "name": "V2EX",
-        "rss": {
-            "hot": {
-                "name": "V2EX 热榜",
-                "url": "https://rsshub.app/v2ex/topics/hot"
-            }
-        }
-    },
     "1point3acres": {
         "name": "一亩三分地",
         "rss": {
