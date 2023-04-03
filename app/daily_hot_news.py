@@ -135,7 +135,7 @@ def build_slack_blocks(title, news):
 def build_hot_news_blocks(news_key):
     rss = rss_urls[news_key]['rss']['hot']
     hot_news = get_post_urls_with_title(rss['url'])
-    logging.info(f"{}".format(hot_news))
+    logging.info(f"{hot_news}")
     hot_news_blocks = build_slack_blocks(
         rss['name'], hot_news)
     return hot_news_blocks
