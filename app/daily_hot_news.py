@@ -56,7 +56,7 @@ def get_text_from_html(html):
     text_maker.ignore_images = True
     return text_maker.handle(html)
 
-def get_post_urls_with_title(rss_url: str):
+def get_post_urls_with_title(rss_url):
     headers = {'Accept': 'application/json'}
     endpoint_url = f"https://rss-worker.thinkingincrowd.workers.dev/?url={rss_url}"
     response = requests.get(endpoint_url, headers=headers)
@@ -135,7 +135,7 @@ def build_slack_blocks(title, news):
 def build_hot_news_blocks(news_key):
     rss = rss_urls[news_key]['rss']['hot']
     hot_news = get_post_urls_with_title(rss['url'])
-    logging.info(f"{hot_news}")
+    logging.info(f"=====> {hot_news}")
     hot_news_blocks = build_slack_blocks(
         rss['name'], hot_news)
     return hot_news_blocks
