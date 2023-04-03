@@ -14,7 +14,6 @@ with open("app/data/hot_news_rss.json", encoding="utf-8", mode='r') as f:
 TODAY = today = date.today()
 MAX_DESCRIPTION_LENGTH = 300
 MAX_POSTS = 3
-executor = concurrent.futures.ThreadPoolExecutor(max_workers=3)
 
 def cut_string(text):
     words = text.split()
@@ -33,9 +32,9 @@ def get_summary_from_gpt_thread(url):
     return str(get_answer_from_llama_web([news_summary_prompt], [url]))
 
 def get_summary_from_gpt(url):
-    # with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-    future = executor.submit(get_summary_from_gpt_thread, url)
-    return future.result(timeout=300)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+        future = executor.submit(get_summary_from_gpt_thread, url)
+        return future.result(timeout=300)
 
 def get_description(entry):
     gpt_answer = None
@@ -59,6 +58,7 @@ def get_text_from_html(html):
 def get_post_urls_with_title(rss_url):
     headers = {'Accept': 'application/json'}
     endpoint_url = f"https://rss-worker.thinkingincrowd.workers.dev/?url={rss_url}"
+    logging.info(f"Getting rss from {rss_url}")
     response = requests.get(endpoint_url, headers=headers)
     if response.status_code == 200:
         try:
@@ -163,22 +163,22 @@ def build_jisilu_news_hot_news_blocks():
     return build_hot_news_blocks('jisilu')
 
 def build_all_news_block():
-    # with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-    v2ex_news = executor.submit(build_v2ex_hot_news_blocks)
-    onepoint3acres_news = executor.submit(build_1point3acres_hot_news_blocks)
-    reddit_news = executor.submit(build_reddit_news_hot_news_blocks)
-    hackernews_news = executor.submit(build_hackernews_news_hot_news_blocks)
-    producthunt_news = executor.submit(build_producthunt_news_hot_news_blocks)
-    # xueqiu_news = executor.submit(build_xueqiu_news_hot_news_blocks)
-    # jisilu_news = executor.submit(build_jisilu_news_hot_news_blocks)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
+        v2ex_news = executor.submit(build_v2ex_hot_news_blocks)
+        onepoint3acres_news = executor.submit(build_1point3acres_hot_news_blocks)
+        reddit_news = executor.submit(build_reddit_news_hot_news_blocks)
+        hackernews_news = executor.submit(build_hackernews_news_hot_news_blocks)
+        producthunt_news = executor.submit(build_producthunt_news_hot_news_blocks)
+        # xueqiu_news = executor.submit(build_xueqiu_news_hot_news_blocks)
+        # jisilu_news = executor.submit(build_jisilu_news_hot_news_blocks)
 
-    v2ex_news_block = v2ex_news.result()
-    onepoint3acres_news_block = onepoint3acres_news.result()
-    reddit_news_block = reddit_news.result()
-    hackernews_news_block = hackernews_news.result()
-    producthunt_news_block = producthunt_news.result()
-    # xueqiu_news_block = xueqiu_news.result()
-    # jisilu_news_block = jisilu_news.result()
+        v2ex_news_block = v2ex_news.result(timeout=300)
+        onepoint3acres_news_block = onepoint3acres_news.result(timeout=300)
+        reddit_news_block = reddit_news.result(timeout=300)
+        hackernews_news_block = hackernews_news.result(timeout=300)
+        producthunt_news_block = producthunt_news.result(timeout=300)
+        # xueqiu_news_block = xueqiu_news.result()
+        # jisilu_news_block = jisilu_news.result()
 
-    return [v2ex_news_block, onepoint3acres_news_block,
+        return [v2ex_news_block, onepoint3acres_news_block,
                         reddit_news_block, hackernews_news_block, producthunt_news_block]
