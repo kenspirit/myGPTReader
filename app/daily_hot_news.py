@@ -141,9 +141,6 @@ def build_hot_news_blocks(news_key):
         rss['name'], hot_news)
     return hot_news_blocks
 
-def build_zhihu_hot_news_blocks():
-    return build_hot_news_blocks('zhihu')
-
 def build_v2ex_hot_news_blocks():
     return build_hot_news_blocks('v2ex')
 
@@ -167,7 +164,6 @@ def build_jisilu_news_hot_news_blocks():
 
 def build_all_news_block():
     # with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-    zhihu_news = executor.submit(build_zhihu_hot_news_blocks)
     v2ex_news = executor.submit(build_v2ex_hot_news_blocks)
     onepoint3acres_news = executor.submit(build_1point3acres_hot_news_blocks)
     reddit_news = executor.submit(build_reddit_news_hot_news_blocks)
@@ -176,7 +172,6 @@ def build_all_news_block():
     # xueqiu_news = executor.submit(build_xueqiu_news_hot_news_blocks)
     # jisilu_news = executor.submit(build_jisilu_news_hot_news_blocks)
 
-    zhihu_news_block = zhihu_news.result()
     v2ex_news_block = v2ex_news.result()
     onepoint3acres_news_block = onepoint3acres_news.result()
     reddit_news_block = reddit_news.result()
@@ -185,5 +180,5 @@ def build_all_news_block():
     # xueqiu_news_block = xueqiu_news.result()
     # jisilu_news_block = jisilu_news.result()
 
-    return [zhihu_news_block, v2ex_news_block, onepoint3acres_news_block,
+    return [v2ex_news_block, onepoint3acres_news_block,
                         reddit_news_block, hackernews_news_block, producthunt_news_block]
