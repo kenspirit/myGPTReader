@@ -59,6 +59,11 @@ def schedule_news():
 def slack_events():
     return slack_handler.handle(request)
 
+@app.route("/slack/daily-news", methods=["GET"])
+def get_daily_hot_news():
+    schedule_news();
+    return 'success'
+
 def insert_space(text):
 
     # Handling the case between English words and Chinese characters
@@ -120,7 +125,7 @@ limiter = RateLimiter(limit=limiter_message_per_user, period=limiter_time_period
 def is_authorized(user_id: str) -> bool:
     if user_id in temp_whitelist_users:
         return True
-    with open(whitelist_file, "r") as f:
+    with open(whitelist_file, encoding="utf-8", mode='r') as f:
         return user_id in f.read().splitlines()
     
 def dialog_context_keep_latest(dialog_texts, max_length=1):
@@ -130,6 +135,7 @@ def dialog_context_keep_latest(dialog_texts, max_length=1):
 
 def format_dialog_text(text, voicemessage=None):
     return insert_space(text.replace("<@U04TCNR9MNF>", "")) + ('\n' + voicemessage if voicemessage else '')
+
 
 @slack_app.event("app_mention")
 def handle_mentions(event, say, logger):

@@ -1,6 +1,6 @@
 import json
 
-with open("app/data/prompt.json", "r") as f:
+with open("app/data/prompt.json", encoding="utf-8", mode='r') as f:
     prompt_data = json.load(f)
 
 def register_slack_slash_commands(slack_app):
