@@ -57,7 +57,7 @@ def get_text_from_html(html):
 
 def get_post_urls_with_title(rss_url):
     headers = {'Accept': 'application/json'}
-    endpoint_url = f"https://rss-worker.thinkingincrowd.workers.dev/?url={rss_url}"
+    endpoint_url = f"https://rss-worker.thinkingincrowd.workers.dev/?url={rss_url}&max=1"
     logging.info(f"Getting rss from {rss_url}")
     response = requests.get(endpoint_url, headers=headers)
     if response.status_code == 200:
