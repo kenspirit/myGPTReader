@@ -162,14 +162,13 @@ def build_jisilu_news_hot_news_blocks():
 def build_all_news_block():
     with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
         onepoint3acres_news = executor.submit(build_1point3acres_hot_news_blocks)
-        reddit_news = executor.submit(build_reddit_news_hot_news_blocks)
-        hackernews_news = executor.submit(build_hackernews_news_hot_news_blocks)
-        producthunt_news = executor.submit(build_producthunt_news_hot_news_blocks)
+        # reddit_news = executor.submit(build_reddit_news_hot_news_blocks)
+        # hackernews_news = executor.submit(build_hackernews_news_hot_news_blocks)
+        # producthunt_news = executor.submit(build_producthunt_news_hot_news_blocks)
 
-        onepoint3acres_news_block = onepoint3acres_news.result(timeout=600)
-        reddit_news_block = reddit_news.result(timeout=600)
-        hackernews_news_block = hackernews_news.result(timeout=600)
-        producthunt_news_block = producthunt_news.result(timeout=600)
+        # onepoint3acres_news_block = onepoint3acres_news.result(timeout=600)
+        # reddit_news_block = reddit_news.result(timeout=600)
+        # hackernews_news_block = hackernews_news.result(timeout=600)
+        # producthunt_news_block = producthunt_news.result(timeout=600)
 
-        return [onepoint3acres_news_block,
-                        reddit_news_block, hackernews_news_block, producthunt_news_block]
+        return [onepoint3acres_news_block]
